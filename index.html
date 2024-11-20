@@ -16,7 +16,7 @@
         }
         #title {
             margin: 20px 0;
-            color: #1DA1F2; /* Azul Twitter */
+            color: #1DA1F2;
             font-size: 2.5em;
             font-weight: bold;
         }
@@ -27,12 +27,12 @@
             cursor: pointer;
             border: none;
             border-radius: 5px;
-            background-color: #1DA1F2; /* Azul Twitter */
+            background-color: #1DA1F2;
             color: white;
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: #0d8de3; /* Azul mais escuro no hover */
+            background-color: #0d8de3;
         }
         textarea {
             width: 90%;
@@ -74,8 +74,8 @@
 
     <!-- Menu de arquivo -->
     <div id="fileMenu">
-        <button id="saveOption">Save as .txt</button>
-        <button id="uploadOption">Upload .txt</button>
+        <button id="saveOption">Save File</button>
+        <button id="uploadOption">Upload File</button>
     </div>
 
     <input type="file" id="fileInput" accept=".txt" style="display: none;">
@@ -93,15 +93,22 @@
             fileMenu.style.display = fileMenu.style.display === 'none' || fileMenu.style.display === '' ? 'block' : 'none';
         });
 
-        // Salvar como arquivo .txt
+        // Salvar como arquivo com nome personalizado
         saveOption.addEventListener('click', () => {
-            const textToSave = noteArea.value;
-            const blob = new Blob([textToSave], { type: 'text/plain' });
-            const anchor = document.createElement('a');
-            anchor.href = URL.createObjectURL(blob);
-            anchor.download = 'note.txt';
-            anchor.click();
-            URL.revokeObjectURL(anchor.href);
+            const fileName = prompt("Enter the file name (without extension):", "note");
+            const fileFormat = prompt("Enter the file format (e.g., txt, md):", "txt");
+
+            if (fileName && fileFormat) {
+                const textToSave = noteArea.value;
+                const blob = new Blob([textToSave], { type: 'text/plain' });
+                const anchor = document.createElement('a');
+                anchor.href = URL.createObjectURL(blob);
+                anchor.download = `${fileName}.${fileFormat}`;
+                anchor.click();
+                URL.revokeObjectURL(anchor.href);
+            } else {
+                alert("File name or format was not provided.");
+            }
         });
 
         // Carregar arquivo .txt
