@@ -45,7 +45,7 @@
             border-radius: 5px;
             resize: vertical;
         }
-        #fileMenu {
+        #fileMenu, #editMenu, #formatMenu {
             display: none;
             position: absolute;
             top: 100px;
@@ -57,7 +57,7 @@
             padding: 10px;
             border-radius: 5px;
         }
-        #fileMenu button {
+        #fileMenu button, #editMenu button, #formatMenu button {
             display: block;
             margin: 5px 0;
         }
@@ -67,33 +67,72 @@
     <h1 id="title">NoteBird</h1>
     <center>
         <button id="fileButton">File</button>
-        <button>Edit</button>
-        <button>Format</button>
+        <button id="editButton">Edit</button>
+        <button id="formatButton">Format</button>
     </center>
     <textarea id="noteArea" placeholder="Write your notes here..."></textarea>
 
-    <!-- Menu de arquivo -->
+    <!-- Menus -->
     <div id="fileMenu">
         <button id="saveOption">Save File</button>
         <button id="uploadOption">Upload File</button>
+    </div>
+
+    <div id="editMenu">
+        <button id="undoOption">Undo</button>
+        <button id="redoOption">Redo</button>
+        <button id="clearOption">Clear All</button>
+    </div>
+
+    <div id="formatMenu">
+        <button id="boldOption">Bold</button>
+        <button id="italicOption">Italic</button>
+        <button id="uppercaseOption">Uppercase</button>
+        <button id="lowercaseOption">Lowercase</button>
     </div>
 
     <input type="file" id="fileInput" accept=".txt" style="display: none;">
 
     <script>
         const fileButton = document.getElementById('fileButton');
+        const editButton = document.getElementById('editButton');
+        const formatButton = document.getElementById('formatButton');
+
         const fileMenu = document.getElementById('fileMenu');
+        const editMenu = document.getElementById('editMenu');
+        const formatMenu = document.getElementById('formatMenu');
+
         const saveOption = document.getElementById('saveOption');
         const uploadOption = document.getElementById('uploadOption');
+        const undoOption = document.getElementById('undoOption');
+        const redoOption = document.getElementById('redoOption');
+        const clearOption = document.getElementById('clearOption');
+        const boldOption = document.getElementById('boldOption');
+        const italicOption = document.getElementById('italicOption');
+        const uppercaseOption = document.getElementById('uppercaseOption');
+        const lowercaseOption = document.getElementById('lowercaseOption');
+
         const noteArea = document.getElementById('noteArea');
         const fileInput = document.getElementById('fileInput');
 
-        // Mostrar ou ocultar o menu
+        // Mostrar ou ocultar menus
+        function toggleMenu(menu) {
+            menu.style.display = menu.style.display === 'none' || menu.style.display === '' ? 'block' : 'none';
+        }
+
         fileButton.addEventListener('click', () => {
-            fileMenu.style.display = fileMenu.style.display === 'none' || fileMenu.style.display === '' ? 'block' : 'none';
+            toggleMenu(fileMenu);
         });
 
-        // Salvar como arquivo com nome personalizado
+        editButton.addEventListener('click', () => {
+            toggleMenu(editMenu);
+        });
+
+        formatButton.addEventListener('click', () => {
+            toggleMenu(formatMenu);
+        });
+
+        // Salvar arquivo
         saveOption.addEventListener('click', () => {
             const fileName = prompt("Enter the file name (without extension):", "note");
             const fileFormat = prompt("Enter the file format (e.g., txt, md):", "txt");
@@ -111,9 +150,9 @@
             }
         });
 
-        // Carregar arquivo .txt
+        // Carregar arquivo
         uploadOption.addEventListener('click', () => {
-            fileInput.click(); // Simula o clique no input de arquivo
+            fileInput.click();
         });
 
         fileInput.addEventListener('change', (event) => {
@@ -121,17 +160,49 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    noteArea.value = e.target.result; // Insere o conteúdo no textarea
+                    noteArea.value = e.target.result;
                 };
                 reader.readAsText(file);
             }
         });
 
-        // Ocultar o menu ao clicar fora dele
-        document.addEventListener('click', (event) => {
-            if (!fileMenu.contains(event.target) && event.target !== fileButton) {
-                fileMenu.style.display = 'none';
+        // Edição
+        undoOption.addEventListener('click', () => {
+            document.execCommand('undo');
+        });
+
+        redoOption.addEventListener('click', () => {
+            document.execCommand('redo');
+        });
+
+        clearOption.addEventListener('click', () => {
+            if (confirm("Are you sure you want to clear all text?")) {
+                noteArea.value = '';
             }
+        });
+
+        // Formatação
+        boldOption.addEventListener('click', () => {
+            noteArea.style.fontWeight = noteArea.style.fontWeight === 'bold' ? 'normal' : 'bold';
+        });
+
+        italicOption.addEventListener('click', () => {
+            noteArea.style.fontStyle = noteArea.style.fontStyle === 'italic' ? 'normal' : 'italic';
+        });
+
+        uppercaseOption.addEventListener('click', () => {
+            noteArea.value = noteArea.value.toUpperCase();
+        });
+
+        lowercaseOption.addEventListener('click', () => {
+            noteArea.value = noteArea.value.toLowerCase();
+        });
+
+        // Ocultar menus ao clicar fora
+        document.addEventListener('click', (event) => {
+            if (!fileMenu.contains(event.target) && event.target !== fileButton) fileMenu.style.display = 'none';
+            if (!editMenu.contains(event.target) && event.target !== editButton) editMenu.style.display = 'none';
+            if (!formatMenu.contains(event.target) && event.target !== formatButton) formatMenu.style.display = 'none';
         });
     </script>
 </body>
