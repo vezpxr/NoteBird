@@ -1,0 +1,14 @@
+#title {
+    text-align: center;
+    color: blue;
+}
+textarea {
+    width: 95%; /* Define a largura como 95% da área disponível */
+    max-width: 1200px; /* Define um limite máximo opcional */
+    height: 500px; /* Aumenta a altura */
+    padding: 15px; /* Melhora o espaçamento interno */
+    font-size: 18px; /* Ajusta o tamanho do texto */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: both; /* Permite redimensionar a caixa */
+}

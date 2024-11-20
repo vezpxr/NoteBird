@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoteBird</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1 id="title">NoteBird</h1>
+    <center><button id="saveButton">File</button> <button>Edit</button> <button>Format</button></center>
+    <hr>
+    <center><textarea id="noteArea"></textarea></center>
+    <script>
+        // Selecionar elementos
+        const saveButton = document.getElementById('saveButton');
+        const noteArea = document.getElementById('noteArea');
+
+        // Função para salvar o conteúdo como .txt
+        saveButton.addEventListener('click', () => {
+            const textToSave = noteArea.value; // Captura o texto da área de notas
+            const blob = new Blob([textToSave], { type: 'text/plain' }); // Cria o arquivo .txt
+            const anchor = document.createElement('a'); // Cria um link para download
+            anchor.href = URL.createObjectURL(blob);
+            anchor.download = 'note.txt'; // Nome do arquivo
+            anchor.click(); // Simula o clique no link
+            URL.revokeObjectURL(anchor.href); // Libera o objeto na memória
+        });
+    </script>
+</body>
+</html>
